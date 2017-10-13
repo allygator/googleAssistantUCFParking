@@ -8,6 +8,7 @@ process.env.DEBUG = 'actions-on-google:*';
 const Assistant = require('actions-on-google').DialogflowApp;
 
 // the actions we are supporting (get them from Dialogflow)
+// variable referenced in actionmap, action names from Dialogflow
 const ACTION_HELLO = 'hello';
 const ACTION_STATUS = 'garageStatus';
 const ACTION_SMALL = 'smallestGarage';
@@ -15,6 +16,7 @@ const ACTION_SMALL = 'smallestGarage';
 exports.helloWorld = (req, res) => {
   const assistant = new Assistant({request: req, response: res});
 
+  //Populates garages array for use in garage specificGarageStatus and smallestGarage
   function getGarages () {
       return new Promise ( (resolve, reject) => {
         var r;
@@ -40,6 +42,7 @@ exports.helloWorld = (req, res) => {
     });
   }
 
+  //Hello test function
   function hello (assistant) {
       /*getGarages().then( function(garages){
         console.log("in promise");
@@ -53,10 +56,12 @@ exports.helloWorld = (req, res) => {
       assistant.ask("Hello everyone!");
   }
 
+  //Check the status of a specific garage, specific in the argument given by the user
   function specificGarageStatus (assistant) {
       assistant.ask("I would tell you the available space if I worked!");
   }
 
+  //Find the garage with the most available space
   function smallestGarage (assistant) {
       assistant.ask("I would tell you which garage is the best if I worked!");
   }
