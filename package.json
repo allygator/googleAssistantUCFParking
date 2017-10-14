@@ -2,10 +2,16 @@
     "name": "helloWorlds!",
     "description": "helloworld webhook",
     "version": "0.0.1",
+    "scripts": {
+        "test": "mocha"
+    },
     "dependencies": {
-      "request" : "latest",
-      "axios"    : "latest",
-      "cheerio"    : "latest",
-      "actions-on-google": "^1.0.0"
+        "request": "latest",
+        "axios": "latest",
+        "cheerio": "latest",
+        "actions-on-google": "^1.0.0"
+    },
+    "devDependencies": {
+        "mocha": "4.0.1"
     }
 }
