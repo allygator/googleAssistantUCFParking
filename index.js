@@ -1,7 +1,6 @@
 'use strict';
 
-const request = require('request');
-
+const garages = require('./garages');
 process.env.DEBUG = 'actions-on-google:*';
 
 // We need the Assistant client for all the magic here
@@ -16,44 +15,17 @@ const ACTION_SMALL = 'smallestGarage';
 exports.helloWorld = (req, res) => {
   const assistant = new Assistant({request: req, response: res});
 
-  //Populates garages array for use in garage specificGarageStatus and smallestGarage
-  function getGarages () {
-      return new Promise ( (resolve, reject) => {
-        var r;
-        const garages = [];
-        r = request('https://secure.parking.ucf.edu/GarageCount/iframe.aspx/', function(error, response, body) {
-          var $ = cheerio.load(body);
-          $('.dxgvDataRow_DevEx').each(function(i, obj) {
-            var html, j, len, line, percent, thisGarage;
-            thisGarage = {};
-            html = $(obj).html().replace(RegExp(' ', 'g'), '').split('\n');
-            for (j = 0, len = html.length; j < len; j++) {
-              line = html[j];
-              if (line.indexOf("percent:") === 0) {
-                percent = parseInt(line.replace("percent:", ''));
-                thisGarage.perc = percent;
-              }
-            }
-            thisGarage.garage = ($(obj).find('.dxgv').html()).replace("Garage ", '');
-            garages[i] = thisGarage;
-          });
-        });
-        resolve(garages);
-    });
-  }
-
   //Hello test function
   function hello (assistant) {
-      /*getGarages().then( function(garages){
-        console.log("in promise");
-          if (garages.length===0) {
-              assistant.tell("I dont have garages!");
-          } else {
-              assistant.tell("I have garages!");
-          }
-        console.log("out promise");
-      });*/
-      assistant.ask("Hello everyone!");
+    garages.getAllGarages
+    .then( function(garages){
+      console.log("in promise");
+      if (garages.length===0)
+        assistant.tell("I dont have garages!");
+      else
+        assistant.tell("I have garages!");
+    });
+    assistant.ask("Hello everyone!");
   }
 
   //Check the status of a specific garage, specific in the argument given by the user
